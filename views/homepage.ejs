@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="stylesheets/output.css">
+    <style>
+        body,
+        html {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #6B46C1, #D53F8C, #805AD5, #D69E2E);
+            background-size: 400% 400%;
+            animation: gradientMove 15s infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-white shadow-xl rounded-lg p-8 max-w-screen-lg w-full">
+        <h1 class="text-3xl font-bold text-center text-purple-600 mb-4">Shorten Your URL</h1>
+        <p class="text-center text-gray-600 mb-6">Enter a long URL to generate a short version.</p>
+        <form action="/url" method="POST" class="space-y-4">
+            <div>
+                <label for="originalUrl" class=" ml-1 mb-2 block text-sm font-medium text-gray-700">Original URL</label>
+                <input type="text" readonly
+                    class=" <%= link ? 'block' : 'hidden' %> outline-none w-full text-gray-600 p-2 border border-gray-300 rounded-lg"
+                    value="<%= originalUrl %>">
+                <input type="url" id="originalUrl" name="originalUrl" required placeholder="https://example.com"
+                    class=" <%= !link ? 'block' : 'hidden' %> w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 outline-none">
+            </div>
+            <button type="submit"
+                class="<%= !link ? 'inline-block' : 'hidden' %> w-full bg-purple-600 text-white font-bold p-3 rounded-lg hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105">Generate
+                Short URL</button>
+
+            <div id="shortUrlContainer" class="<%= link ? 'block' : 'hidden' %>  mt-4 bg-gray-100 p-4 rounded-lg ">
+                <label for="shortUrl" class="block text-sm font-medium text-gray-700">Shortened URL</label>
+                <div class=" flex items-center mt-2">
+                    <input type="text" id="shortUrl" readonly
+                        class=" tracking-tighter text-xs font-semibold outline-none w-full overflow-hidden text-gray-600 p-2 border border-gray-300 rounded-lg"
+                        value="<%= shortUrl %>">
+                    <button type="button" onclick="copyShortUrl()"
+                        class="ml-2 bg-purple-600 text-white font-bold p-2 rounded-lg hover:bg-purple-700 transition duration-300">Copy</button>
+                    <a href="/url"
+                        class="ml-2  bg-purple-600 text-white font-bold p-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                        Back </a>
+                </div>
+            </div>
+
+            <a type="submit" href="/url/<%= shortUrl %>" target="_blank"
+                class=" <%= link ? 'inline-block' : 'hidden' %>  text-center w-full bg-purple-600 text-white font-bold p-3 rounded-lg hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105">Redirect↗</a>
+        </form>
+        <!-- <div class="mt-6 text-center">
+            <p class="text-sm text-gray-500">Built with ❤️ using <span class="font-bold text-purple-600">Tailwind CSS</span></p>
+        </div> -->
+    </div>
+
+    <script>
+        function copyShortUrl() {
+            const shortUrlInput = document.getElementById('shortUrl');
+            shortUrlInput.select();
+            shortUrlInput.setSelectionRange(0, 99999); // For mobile devices
+            navigator.clipboard.writeText(shortUrlInput.value);
+            alert('Shortened URL copied to clipboard!');
+        }
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+<!-- <link rel="stylesheet" href="stylesheets/output.css"> -->
